@@ -36,11 +36,11 @@
   {
     "Labirintos" : [
       {
-            "Id" : 0,
-            "Dificuldade" : "TesteAqui",
-            "Completo" : false,
-            "Passos" : 0,
-            "Exploracao" : 0.0
+        "Id" : 0,
+        "Dificuldade" : "TesteAqui",
+        "Completo" : false,
+        "Passos" : 0,
+        "Exploracao" : 0.0
       },
       {
         "Id" : 1,

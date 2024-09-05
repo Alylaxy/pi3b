@@ -2,18 +2,26 @@ using AcheASaida.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace AcheASaida.Data;
-
-public class AppDbContext(IConfiguration configuracao) : DbContext
+namespace AcheASaida.Data
 {
-    private DbSet<Grupo> Grupos { get; set; }
-    private DbSet<Labirinto> Labirintos { get; set; }
-    private DbSet<Vertice> Vertices { get; set; }
-    private DbSet<InfoLabirinto> InfoLabirintos { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public class AppDbContext : DbContext
     {
-        optionsBuilder.UseSqlite(configuracao.GetConnectionString("SqliteConnection"));
-        base.OnConfiguring(optionsBuilder);
+        private readonly IConfiguration _configuracao;
+
+        public AppDbContext(IConfiguration configuracao)
+        {
+            _configuracao = configuracao;
+        }
+
+        public DbSet<Grupo> Grupos { get; set; }
+        public DbSet<Labirinto> Labirintos { get; set; }
+        public DbSet<Vertice> Vertices { get; set; }
+        public DbSet<InfoLabirinto> InfoLabirintos { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(_configuracao.GetConnectionString("SqliteConnection"));
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }

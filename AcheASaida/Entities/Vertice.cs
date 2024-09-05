@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace AcheASaida.Entities;
 
 //Dados de um vértice de um labirinto.
 public class Vertice
 {
+    [Key]
     public required Guid Id { get; init; }
     public List<Vertice> Conexoes { get; private set; }
     public int Tipo { get; init; }

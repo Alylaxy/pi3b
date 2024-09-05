@@ -5,6 +5,7 @@ namespace AcheASaida.Entities;
 
 public class Labirinto
 {
+    [Key]
     public required int Id { get; init; }
     
     [StringLength(50, ErrorMessage = "A dificuldade não pode ter mais que 50 caracteres.")]
