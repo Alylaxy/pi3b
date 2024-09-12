@@ -23,5 +23,13 @@ namespace AcheASaida.Data
             optionsBuilder.UseSqlite(_configuracao.GetConnectionString("SqliteConnection"));
             base.OnConfiguring(optionsBuilder);
         }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<InfoLabirinto>()
+                .HasOne(il => il.Grupo)
+                .WithMany(g => g.Informacoes)
+                .HasForeignKey(il => il.GrupoId);
+        }
     }
 }

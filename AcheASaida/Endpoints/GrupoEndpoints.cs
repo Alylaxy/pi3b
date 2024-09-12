@@ -1,34 +1,28 @@
 using AcheASaida.Contracts;
+using AcheASaida.Data;
+using AcheASaida.Services;
 
 namespace AcheASaida.Endpoints;
 
 public static class GrupoEndpoints
 {
-    private static readonly List<GrupoDto> Grupos = [];
-
     public static RouteGroupBuilder RegistrarGrupoEndpoints(this WebApplication app)
     {
         var grupoGrupo = app.MapGroup("grupo").WithParameterValidation();
-
+        
         const string criarGrupoEndpoint = "CriarGrupo";
         const string obterGrupoEndpoint = "ObterGrupo";
         
-        grupoGrupo.MapPost("/", (CriarGrupoDto grupo) =>
+        grupoGrupo.MapPost("/", async (CriarGrupoDto grupoDto, AppDbContext dbContext) =>
         {
-            var novoGrupo = new GrupoDto(Guid.NewGuid(), grupo.Nome, 0, [], 0, 0M, 0M, []);
-            Grupos.Add(novoGrupo);
-            return Results.CreatedAtRoute(obterGrupoEndpoint, new {id = novoGrupo.Id}, novoGrupo);
+            var novoGrupoDto = await new GrupoService(dbContext).CriarGrupo(grupoDto);
+            return Results.CreatedAtRoute(obterGrupoEndpoint, new {id = novoGrupoDto.Id}, novoGrupoDto);
         }).WithName(criarGrupoEndpoint);
 
-        grupoGrupo.MapGet("/{id}", (Guid id) =>
+        grupoGrupo.MapGet("/{id}", async (Guid id, AppDbContext dbContext) =>
         {
-            var grupo = Grupos.FirstOrDefault(g => g.Id == id);
-            if (grupo == null)
-            {
-                return Results.NotFound();
-            }
-
-            return Results.Ok(grupo);
+            var grupoDto = await new GrupoService(dbContext).ObterGrupoComInformacoes(id);
+            return Results.Ok(grupoDto);
         }).WithName(obterGrupoEndpoint);
 
         return grupoGrupo;

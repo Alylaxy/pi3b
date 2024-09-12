@@ -7,4 +7,4 @@ public record InfoLabirintoDto(
     string Dificuldade,
     bool Completo,
     int Passos,
-    float PorcentagemExploracao);
+    decimal PorcentagemExploracao);

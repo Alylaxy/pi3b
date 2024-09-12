@@ -1,25 +1,21 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 
 namespace AcheASaida.Entities;
 
-public class Labirinto
+public class Labirinto(string dificuldade)
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required int Id { get; init; }
     
-    [StringLength(50, ErrorMessage = "A dificuldade não pode ter mais que 50 caracteres.")]
-    public string Dificuldade { get; private set; }
-    
-    public Vertice Entrada { get; private set; }
-    
-    public List<Vertice> Vertices { get; private set; }
+    [Required][StringLength(50, ErrorMessage = "A dificuldade não pode ter mais que 50 caracteres.")]
+    public string Dificuldade { get; private set; } = dificuldade;
 
-    public Labirinto(string dificuldade)
-    {
-        Dificuldade = dificuldade;
-        Vertices = [];
-    }
+    public Vertice? Entrada { get; private set; }
+    
+    public List<Vertice> Vertices { get; private set; } = [];
 
     public void AdicionarVertices(List<Vertice> vertices)
     {

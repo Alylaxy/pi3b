@@ -4,9 +4,11 @@ namespace AcheASaida.Entities
 {
     public class InfoLabirinto
     {
-        [Key]
-        public required int IdLabirinto { get; init; }
-        [StringLength(50, ErrorMessage = "A dificuldade não pode ter mais que 50 caracteres.")]
+        [Required][Key]
+        public int IdLabirinto { get; init; }
+        public Guid GrupoId { get; set; }
+        public Grupo Grupo { get; set; }
+        [Required][StringLength(50, ErrorMessage = "A dificuldade não pode ter mais que 50 caracteres.")]
         public string Dificuldade { get; private set; }
         public bool Completo { get; private set; } = false;
         public int Passos { get; private set; } = 0;

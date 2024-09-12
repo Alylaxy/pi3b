@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AcheASaida.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240905231615_Initial")]
-    partial class Initial
+    [Migration("20240912151630_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,7 @@ namespace AcheASaida.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("GrupoId")
+                    b.Property<Guid>("GrupoId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Passos")
@@ -93,7 +93,7 @@ namespace AcheASaida.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("EntradaId")
+                    b.Property<Guid?>("EntradaId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -132,18 +132,20 @@ namespace AcheASaida.Migrations
 
             modelBuilder.Entity("AcheASaida.Entities.InfoLabirinto", b =>
                 {
-                    b.HasOne("AcheASaida.Entities.Grupo", null)
+                    b.HasOne("AcheASaida.Entities.Grupo", "Grupo")
                         .WithMany("Informacoes")
-                        .HasForeignKey("GrupoId");
+                        .HasForeignKey("GrupoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Grupo");
                 });
 
             modelBuilder.Entity("AcheASaida.Entities.Labirinto", b =>
                 {
                     b.HasOne("AcheASaida.Entities.Vertice", "Entrada")
                         .WithMany()
-                        .HasForeignKey("EntradaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EntradaId");
 
                     b.Navigation("Entrada");
                 });

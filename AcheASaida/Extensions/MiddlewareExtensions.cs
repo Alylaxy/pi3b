@@ -11,6 +11,5 @@ public static class MiddlewareExtensions
         }
 
         app.UseHttpsRedirection();
-        app.UseHttpLogging();
     }
 }

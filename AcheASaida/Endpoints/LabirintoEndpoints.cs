@@ -1,17 +1,15 @@
 using AcheASaida.Contracts;
+using AcheASaida.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AcheASaida.Endpoints;
 
 public static class LabirintoEndpoints
 {
-    private static readonly List<GrupoDto> Grupos = [];
-
     public static RouteGroupBuilder RegistrarLabirintoEndpoints(this WebApplication app)
     {
         var grupoLabirinto = app.MapGroup("labirinto").WithParameterValidation();
-
-        const string criarGrupoEndpoint = "CriarGrupo";
-        const string obterGrupoEndpoint = "ObterGrupo";
+        
         const string iniciarDesafioEndpoint = "IniciarDesafio";
         const string obterInformacoesGrupoSobreLabirintoEndpoint = "ObterInformacoesGrupoSobreLabirinto";
 
@@ -20,15 +18,21 @@ public static class LabirintoEndpoints
             //abrir canal websocket e retornar conexão
         }).WithName(iniciarDesafioEndpoint);
 
-        grupoLabirinto.MapGet("/{id}", (Guid id) =>
+        grupoLabirinto.MapGet("/{id}", async (Guid id, AppDbContext dbContext) =>
         {
-            var grupo = Grupos.FirstOrDefault(g => g.Id == id);
-            if (grupo == null)
+            var infoGrupo = await dbContext.InfoLabirintos.FirstOrDefaultAsync(il => il.GrupoId == id);
+            if (infoGrupo == null)
             {
-                return Results.NotFound();
+                return Results.NotFound("Grupo não possui informações ou não existe");
             }
-
-            return Results.Ok(grupo.Informacoes);
+            var infoLabirinto = new InfoLabirintoDto(
+                infoGrupo.IdLabirinto,
+                infoGrupo.Dificuldade,
+                infoGrupo.Completo,
+                infoGrupo.Passos,
+                infoGrupo.PorcentagemExploracao
+            );
+            return Results.Ok(infoLabirinto);
         }).WithName(obterInformacoesGrupoSobreLabirintoEndpoint);
         return grupoLabirinto;
     }

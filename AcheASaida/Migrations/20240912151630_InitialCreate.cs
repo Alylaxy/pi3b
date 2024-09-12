@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AcheASaida.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,11 +34,11 @@ namespace AcheASaida.Migrations
                 {
                     IdLabirinto = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    GrupoId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Dificuldade = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Completo = table.Column<bool>(type: "INTEGER", nullable: false),
                     Passos = table.Column<int>(type: "INTEGER", nullable: false),
-                    PorcentagemExploracao = table.Column<decimal>(type: "TEXT", nullable: false),
-                    GrupoId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    PorcentagemExploracao = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +47,8 @@ namespace AcheASaida.Migrations
                         name: "FK_InfoLabirintos_Grupos_GrupoId",
                         column: x => x.GrupoId,
                         principalTable: "Grupos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,7 +58,7 @@ namespace AcheASaida.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Dificuldade = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    EntradaId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    EntradaId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,8 +115,7 @@ namespace AcheASaida.Migrations
                 table: "Labirintos",
                 column: "EntradaId",
                 principalTable: "Vertices",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />

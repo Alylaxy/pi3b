@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using AcheASaida.Entities;
 
 namespace AcheASaida.Contracts;
 
